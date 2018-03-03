@@ -151,18 +151,22 @@ class UsersDAO extends UsersDAOBase {
     
    public static function getRankingClassName($user_id) {
         $sql = 'SELECT
-                    urc . classname
+                    `urc`.`classname`
                 FROM
-                    User_Rank_Cutoffs urc
+                    `User_Rank_Cutoffs` `urc`
                 WHERE
-                    (WHERE 
-                        ur . score 
-                    FROM 
-                        User_Rank ur 
-                    WHERE 
-                        user_id = ?) >= urc . score
+                    `urc`.score >= (
+                        SELECT
+                            `ur`.`score`
+                        FROM
+                            `User_Rank` `ur`
+                        WHERE
+                            `ur`.user_id = ?
+                    )
                 ORDER BY
-                    urc . score DESC;';
+                    `urc`.percentile ASC
+                LIMIT
+                    1;';
         $params = [$user_id];
         global $conn;
         return $conn->GetOne($sql, $params) ?? 'user-rank-unranked';
