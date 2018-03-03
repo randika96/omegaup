@@ -111,7 +111,7 @@ class UserRankTest extends OmegaupTestCase {
     }
 
     public function testUserRankingClassName() {
-        // Create a user and sumbit a run with him
+        // Create a user and sumbit a run with them
         $contestant = UserFactory::createUser();
         $problemData = ProblemsFactory::createProblem();
         $runData = RunsFactory::createRunToProblem($problemData, $contestant);
